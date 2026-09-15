@@ -1,4 +1,4 @@
-Question 1: Running uv init created pyproject.toml, which contains the project’s metadata, dependencies, and build configuration; .python-version, which specifies Python 3.11; README.md, which is used for project documentation; and src/mlops_lab_1/__init__.py, which initializes the Python package and contains its starter code.
+Question 1: Running uv init created pyproject.toml, which contains the project’s metadata, dependencies, and build configuration; .python-version, which specifies Python 3.11; README.md, which is used for project documentation; and src/mlops_lab_1/**init**.py, which initializes the Python package and contains its starter code.
 
 Question 2:Running dvc init created .dvc/config to store DVC settings (currently empty), .dvc/.gitignore to exclude local configuration, temporary files, and cache from Git, and .dvcignore to specify files DVC should ignore. It also created .dvc/tmp/ for internal temporary files. The files .dvc/config, .dvc/.gitignore, and .dvcignore should be pushed to Git and are already tracked in your folder; temporary files, cache, and local credentials should not be pushed.
 

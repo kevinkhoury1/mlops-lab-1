@@ -1,5 +1,6 @@
-"""Prepare Food-11 images with: uv run python ./src/food11/data.py."""
+"""Resize and arrange the Food-11 datasets."""
 
+import argparse
 from pathlib import Path
 import shutil
 
@@ -14,6 +15,17 @@ SPLITS = ("training", "evaluation", "validation")
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 IMAGE_SIZE = (128, 128)
 MINI_LIMIT = 100
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path(__file__).resolve().parents[2] / "data",
+        help="Folder containing food11_raw (default: project data folder)",
+    )
+    return parser.parse_args()
 
 
 def prepare_data(data_dir: Path) -> None:
@@ -65,4 +77,4 @@ def prepare_data(data_dir: Path) -> None:
 
 
 if __name__ == "__main__":
-    prepare_data(Path(__file__).resolve().parents[2] / "data")
+    prepare_data(parse_args().data_dir.resolve())
