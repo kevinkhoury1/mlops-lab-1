@@ -1,20 +1,35 @@
 """Resize and arrange the Food-11 datasets."""
 
 import argparse
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 from PIL import Image, ImageOps
 
-
-CATEGORIES = (
+CLASSES = [
     "Bread", "Dairy product", "Dessert", "Egg", "Fried food", "Meat",
     "Noodles-Pasta", "Rice", "Seafood", "Soup", "Vegetable-Fruit",
-)
+]
+CATEGORIES = tuple(CLASSES)
 SPLITS = ("training", "evaluation", "validation")
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 IMAGE_SIZE = (128, 128)
 MINI_LIMIT = 100
+
+
+def category_from_filename(filename: str) -> str:
+    """Return the Food-11 category encoded at the start of a filename."""
+    prefix = Path(filename).stem.split("_", 1)[0]
+    if not prefix.isdigit() or not 0 <= int(prefix) < len(CLASSES):
+        raise ValueError(f"Expected a category ID from 0 to 10: {filename}")
+    return CLASSES[int(prefix)]
+
+
+def resize_image(img: Image.Image, size: int = 128) -> Image.Image:
+    """Return an RGB, square copy of an image at the requested size."""
+    return ImageOps.exif_transpose(img).convert("RGB").resize(
+        (size, size), Image.Resampling.LANCZOS
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,10 +59,7 @@ def prepare_data(data_dir: Path) -> None:
         for source in sorted(source_dir.iterdir()):
             if not source.is_file() or source.suffix.lower() not in IMAGE_EXTENSIONS:
                 continue
-            prefix = source.stem.split("_", 1)[0]
-            if not prefix.isdigit() or not 0 <= int(prefix) < len(CATEGORIES):
-                raise ValueError(f"Expected a category ID from 0 to 10: {source}")
-            sources[split].append((source, CATEGORIES[int(prefix)]))
+            sources[split].append((source, category_from_filename(source.name)))
         if not sources[split]:
             raise ValueError(f"No images found in {source_dir}")
 
@@ -65,9 +77,7 @@ def prepare_data(data_dir: Path) -> None:
         for source, category in images:
             destination = processed / split / category / source.name
             with Image.open(source) as image:
-                resized = ImageOps.exif_transpose(image).convert("RGB").resize(
-                    IMAGE_SIZE, Image.Resampling.LANCZOS
-                )
+                resized = resize_image(image, IMAGE_SIZE[0])
                 resized.save(destination)
             if counts[category] < MINI_LIMIT:
                 shutil.copyfile(destination, mini / split / category / source.name)

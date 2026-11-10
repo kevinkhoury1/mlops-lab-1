@@ -1,16 +1,16 @@
 """Train a Food-11 classifier and record the run in MLflow."""
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
-import mlflow
 import mlflow.pytorch
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets, models, transforms
 
+import mlflow
 
 MLFLOW_TRACKING_URI = "http://127.0.0.1:5000"
 MLFLOW_EXPERIMENT = "food11"
@@ -185,6 +185,7 @@ def main() -> None:
                 "architecture": "resnet18",
                 "pretrained": True,
                 "device": device.type,
+                "test_size": len(loaders["evaluation"].dataset),
             }
         )
         for epoch in range(args.epochs):
