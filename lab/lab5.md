@@ -22,7 +22,7 @@ Because `smoke` declares `needs: test`, GitHub skips it when the test job fails.
 
 ## Question 6
 
-The cloud duration and second-run cache comparison are pending because this Lab 5 workflow has intentionally not been pushed yet. After it is pushed, the Actions page will show the exact duration. On the second run, `uv sync` should be faster because `setup-uv` restores its dependency cache, and the registry build should reuse GitHub Actions layer cache.
+The first GitHub Actions run completed successfully in `7m 22s`: `test` took `19s`, `smoke` took `1m 47s`, and `push` took `5m 9s`. A second run with no code changes completed in `3m 1s`: `test` took `20s`, `smoke` took `2m 10s`, and `push` took only `21s`. The second test log confirmed a `setup-uv` cache hit, although the whole test job was about the same length because the fresh runner still created its environment. The major improvement was the registry push, which reused the GitHub Actions Docker layer cache instead of rebuilding and exporting every layer.
 
 ## Question 7
 
