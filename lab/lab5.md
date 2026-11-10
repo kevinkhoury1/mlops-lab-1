@@ -34,7 +34,7 @@ The push job explicitly grants `contents: read` and `packages: write` because Gi
 
 ## Question 9
 
-Once branch protection is enabled, the deliberately broken pull request should show the `test` check as failed, skip `smoke`, and block a normal merge until a fixed commit makes the required checks green. This gives the team one centrally enforced and reproducible gate instead of relying on every developer to remember to run the same tests correctly on their laptop. The live pull-request observation is pending because no Lab 5 branch has been pushed.
+Once branch protection is enabled, the deliberately broken pull request should show the `test` check as failed, skip `smoke`, and block a normal merge until a fixed commit makes the required checks green. This gives the team one centrally enforced and reproducible gate instead of relying on every developer to remember to run the same tests correctly on their laptop. The Lab 5 workflow has been pushed and verified on `main`; the protected-branch pull-request exercise still requires enabling the rule in the repository settings.
 
 ## Question 10
 
